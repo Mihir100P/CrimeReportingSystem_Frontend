@@ -1,3 +1,5 @@
+run command - npm run dev
+
 <<<<<<< HEAD
 =======
 # React + Vite
