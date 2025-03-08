@@ -1,0 +1,23 @@
+ /* html, body, #root {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrap {
+  flex: 1;
+}
+.custom-navbar {
+  background-color: black !important;
+  height: 5rem;
+}
+.logohead{
+  margin-top: 10px;
+}
+ */
