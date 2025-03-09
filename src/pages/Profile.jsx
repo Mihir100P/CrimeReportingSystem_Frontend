@@ -3,15 +3,22 @@ import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 const Profile = () => {
-  const { user: authUser } = useContext(AuthContext);
+  const { allData } = useContext(AuthContext);
 
   return (
     <div className="container mt-5">
       <div className="card shadow p-4 text-center">
-        <h2 className="mt-3">{authUser?.name}</h2>
-        <p className="text-muted">{authUser?.email}</p>
+        <h2 className="mt-3">{allData?.name}</h2>
+        <p className="text-muted">{allData?.email}</p>
+        <p className="text-muted">
+              {allData?.phoneNumber ? allData.phoneNumber : "Phone number not available"}
+        </p>
+        <p className="text-muted">
+             Account created at: {allData?.createdAt ? new Date(allData.createdAt).toLocaleString() : "Not available"}
+  </p>
+
         <h5 className="mt-3">
-          Credit Points: <span className="badge bg-success">{authUser?.credits || 0}</span>
+          Credit Points: <span className="badge bg-success">{allData?.credits || 0}</span>
         </h5>
       </div>
       

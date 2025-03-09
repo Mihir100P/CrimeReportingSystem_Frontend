@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { reportsApi } from "../services/api";
+import { AuthContext } from "../context/AuthContext"; // Import Auth Context
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const ReportForm = () => {
@@ -13,12 +14,19 @@ const ReportForm = () => {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  
+  const { user, updateUserPoints } = useContext(AuthContext); // Access user and points update function
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
   const createReportMutation = useMutation({
     mutationFn: (formData) => reportsApi.createReport(formData),
-    onSuccess: () => {
+    onSuccess: async () => {
+      // After submitting the report, add points
+      if (user) {
+        await updateUserPoints(user._id, 100); // Adds 100 points per report
+      }
+
       reset();
       setFiles([]);
       setPreviewUrls([]);
@@ -51,7 +59,7 @@ const ReportForm = () => {
             const data = await response.json();
             setAddress(data.display_name || "Unknown location");
           } catch (error) {
-            setAddress("Unable to determine address"+error);
+            setAddress("Unable to determine address: " + error);
           }
         },
         (error) => {
@@ -79,6 +87,7 @@ const ReportForm = () => {
     files.forEach((file) => {
       formData.append("media", file);
     });
+
     createReportMutation.mutate(formData);
   };
 
@@ -108,8 +117,8 @@ const ReportForm = () => {
             <option value="vandalism">Vandalism</option>
             <option value="fraud">Fraud</option>
             <option value="harassment">Harassment</option>
-            <option value="Voilent">Voilent</option>
-            <option value="Traffic offense">Traffic offense</option>
+            <option value="violent">Violent</option>
+            <option value="traffic offense">Traffic offense</option>
             <option value="suspicious">Suspicious Activity</option>
             <option value="other">Other</option>
           </select>
@@ -144,5 +153,3 @@ const ReportForm = () => {
 };
 
 export default ReportForm;
-
-
