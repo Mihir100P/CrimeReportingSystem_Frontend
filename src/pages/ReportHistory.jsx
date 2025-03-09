@@ -21,15 +21,19 @@ const ReportHistory = () => {
   const deleteMutation = useMutation({
     mutationFn: reportsApi.deleteReport,
     onSuccess: () => {
-      queryClient.invalidateQueries(['userReports']);
+      queryClient.invalidateQueries(['userReports']); // Refresh report list
+    },
+    onError: (error) => {
+      alert("Error deleting report: " + error.message);
     },
   });
-
+  
   const handleDelete = (reportId) => {
     if (window.confirm("Are you sure you want to delete this report?")) {
       deleteMutation.mutate(reportId);
     }
   };
+  
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -92,7 +96,7 @@ const ReportHistory = () => {
                   <td>{formatDate(report.createdAt)}</td>
                   <td><span className={getStatusColor(report.status)}>{report.status}</span></td>
                   <td>
-                    <button className="btn btn-sm btn-info me-2">View Details</button>
+                  <Link to={`/reports/${report._id}`} className="btn btn-sm btn-info me-2">View Details</Link>
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(report._id)}>Delete</button>
                   </td>
                 </tr>

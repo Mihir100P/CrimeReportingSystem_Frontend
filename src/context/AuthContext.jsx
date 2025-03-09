@@ -67,17 +67,22 @@ export const AuthProvider = ({ children }) => {
         }
       );
   
-      // Update local user state
       setUser((prevUser) => ({
         ...prevUser,
-        credits: data.credits,
+        credits: data.credits, 
+      }));
+  
+      setAllData((prevData) => ({
+        ...prevData,
+        credits: data.credits, 
       }));
   
       return { success: true, message: "Points updated successfully" };
     } catch (error) {
       return { success: false, message: error.response?.data?.message || "Failed to update points" };
     }
-  };  
+  };
+  
   
   const login = async (email, password) => {
     try {

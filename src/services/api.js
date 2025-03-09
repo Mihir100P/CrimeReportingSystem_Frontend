@@ -37,7 +37,17 @@ export const reportsApi = {
     return axios.post(`${API_URL}/reports`, formData, config);
   },
   updateReport: (id, data) => api.put(`/reports/${id}`, data),
-};
+  deleteReport: async (id) => {
+    try {
+      const response = await api.delete(`/reports/${id}`);
+      console.log('Delete response:', response.data); // Debug log
+      return response.data;
+    } catch (error) {
+      console.error('Delete error:', error.response?.data || error.message);
+      throw new Error(error.response?.data?.message || 'Failed to delete report');
+    }
+  },
+};  
 
 // Stations API (for police stations)
 export const stationsApi = {

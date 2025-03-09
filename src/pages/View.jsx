@@ -2,24 +2,27 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { Container, Card, Button, Spinner, Alert } from "react-bootstrap";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
-const ViewReport = () => {
+const View = () => {
   const { id } = useParams();
   const [report, setReport] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedMedia, setSelectedMedia] = useState([]); // State for media preview
 
   useEffect(() => {
     const fetchReport = async () => {
       try {
         const config = {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         };
 
         const { data } = await axios.get(`http://localhost:5000/api/reports/${id}`, config);
-      
+        
+        console.log("Fetched Report:", data); // Debugging log
+
         const baseUrl = "http://localhost:5000";
         const updatedMediaUrls = data.mediaUrls.map((url) =>
           url.startsWith("http") ? url : `${baseUrl}${url}`
@@ -28,6 +31,7 @@ const ViewReport = () => {
         setReport({ ...data, mediaUrls: updatedMediaUrls });
         setIsLoading(false);
       } catch (error) {
+        console.error("Failed to fetch report details:", error);
         setError("Failed to fetch report details. " + error.message);
         setIsLoading(false);
       }
@@ -67,28 +71,35 @@ const ViewReport = () => {
                 </h5>
               </Card>
 
+              {/* Map Section */}
               <Card className="mb-4 p-3">
                 <h5>Location</h5>
                 <p>{report.location.address}</p>
-                <iframe
-                  title="incident-location"
-                  src={`https://www.google.com/maps?q=${report.location.coordinates[1]},${report.location.coordinates[0]}&z=15&output=embed`}
-                  width="100%"
-                  height="300px"
-                  style={{ border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                ></iframe>
+                <MapContainer center={[report.location.coordinates[1], report.location.coordinates[0]]} zoom={15} style={{ height: "300px", width: "100%" }}>
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <Marker
+                    position={[report.location.coordinates[1], report.location.coordinates[0]]}
+                    eventHandlers={{
+                      click: () => {
+                        console.log("Media URLs on Marker Click:", report.mediaUrls); // Debugging
+                        setSelectedMedia(report.mediaUrls);
+                      },
+                    }}
+                  >
+                    <Popup>Click to view media</Popup>
+                  </Marker>
+                </MapContainer>
               </Card>
 
-              {report.mediaUrls.length > 0 && (
+              {/* Media Preview Section */}
+              {selectedMedia.length > 0 && (
                 <Card className="mb-4 p-3">
                   <h5>Media Files</h5>
                   <div className="d-flex flex-wrap">
-                    {report.mediaUrls.map((media, index) => (
+                    {selectedMedia.map((media, index) => (
                       <div key={index} className="me-3">
                         {media.endsWith(".mp4") ? (
-                          <video width="250" controls onError={(e) => e.target.src = "/placeholder.mp4"}>
+                          <video width="250" controls>
                             <source src={media} type="video/mp4" />
                             Your browser does not support the video tag.
                           </video>
@@ -120,4 +131,4 @@ const ViewReport = () => {
   );
 };
 
-export default ViewReport;
+export default View;
