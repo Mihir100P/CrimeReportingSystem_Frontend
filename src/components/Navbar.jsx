@@ -53,6 +53,9 @@ const NavigationBar = () => {
                 <Nav.Link as={Link} to="/emergency" className="fw-semibold text-light px-3">
                   Emergency
                 </Nav.Link>
+                <Nav.Link as={Link} to="/alert" className="fw-semibold text-light px-3">
+                  Alert
+                </Nav.Link>
 
                 {user.role === "admin" && (
                   <Nav.Link as={Link} to="/admin" className="fw-semibold text-warning px-3">

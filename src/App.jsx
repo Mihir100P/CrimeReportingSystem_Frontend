@@ -18,6 +18,8 @@ import NotFound from "./pages/NotFound";
 import View from "./pages/View";
 import AdminDashboard from "./pages/AdminDashboard";
 import PoliceDashboard from "./pages/PoliceDashboard";
+import AlertList from "./pages/AlertList";
+
 
 // Components
 import Navbar from "./components/Navbar";
@@ -37,6 +39,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/emergency" element={<EmergencyContacts />} />
           <Route path="/guide" element={<SafetyGuide />} />
+          <Route path="/alert" element={<AlertList />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>

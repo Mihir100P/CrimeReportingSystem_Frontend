@@ -18,11 +18,14 @@ const Home = () => {
             <Button as={Link} to="/map" variant="light" size="lg" className="text-primary me-md-3 mb-3 mb-md-0">
               Locate Services
             </Button>
-            <Button as={Link} to="/emergency" variant="danger" size="lg" className="me-md-3 mb-3 mb-md-0">
+            <Button as={Link} to="/emergency" variant="info" size="lg" className="me-md-3 mb-3 mb-md-0">
               Emergency Contacts
             </Button>
             <Button as={Link} to="/guide" variant="success" size="lg" className="me-md-3 mb-3 mb-md-0">
               Safety Guide
+            </Button>
+            <Button as={Link} to="/alert" variant="danger" size="lg" className="me-md-3 mb-3 mb-md-0">
+              Alerts
             </Button>
           </div>
         </Container>
@@ -63,15 +66,8 @@ const Home = () => {
       
       <section className="bg-dark text-white py-5">
         <Container className="text-center">
-          <h2 className="fw-bold">Ready to get started?</h2>
-          <p className="lead">Register now to report incidents.</p>
           <div className="mt-3">
-            <Button as={Link} to="/register" variant="light" className="me-3">
-              Register
-            </Button>
-            <Button as={Link} to="/login" variant="primary">
-              Sign In
-            </Button>
+            Jatayu is a platform that allows you to report incidents in real-time and receive immediate help.
           </div>
         </Container>
       </section>

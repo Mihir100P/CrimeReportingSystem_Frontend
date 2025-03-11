@@ -21,7 +21,6 @@ const View = () => {
 
         const { data } = await axios.get(`http://localhost:5000/api/reports/${id}`, config);
         
-        console.log("Fetched Report:", data); // Debugging log
 
         const baseUrl = "http://localhost:5000";
         const updatedMediaUrls = data.mediaUrls.map((url) =>

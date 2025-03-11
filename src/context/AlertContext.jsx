@@ -1,11 +1,13 @@
-import React from "react";
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { io } from "socket.io-client";
+
 export const AlertContext = createContext();
 
 export const AlertProvider = ({ children }) => {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const socket = io("http://localhost:5000"); // Adjust based on your backend URL
 
   useEffect(() => {
     const fetchAlerts = async () => {
@@ -23,6 +25,15 @@ export const AlertProvider = ({ children }) => {
     };
 
     fetchAlerts();
+
+    // Listen for new alerts via WebSocket
+    socket.on("new-alert", (newAlert) => {
+      setAlerts((prevAlerts) => [newAlert, ...prevAlerts]); 
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   return (
